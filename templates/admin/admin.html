@@ -1,0 +1,129 @@
+<!-- Author: Dimitrios Poulimenos -->
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if current_user.is_authenticated and current_user.role=='admin' %}
+        <ul style="justify-content: center" class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="viewusers-tab" data-bs-toggle="tab" data-bs-target="#viewusers" type="button" role="tab" aria-controls="viewusers" aria-selected="true">View All Users</button>
+                </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="viewlogs-tab" data-bs-toggle="tab" data-bs-target="#viewlogs" type="button" role="tab" aria-controls="viewlogs" aria-selected="false">View Security Logs</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="quiz-tab" data-bs-toggle="tab" data-bs-target="#quiz" type="button" role="tab" aria-controls="quiz" aria-selected="false">Quiz Questions</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="leadrbrd-tab" data-bs-toggle="tab" data-bs-target="#leaderboard" type="button" role="tab" aria-controls="leaderboard" aria-selected="false">Leaderboard</button>
+            </li>
+
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="viewusers" role="tabpanel" aria-labelledby="viewusers-tab">
+                <table style="margin-top: 50px" class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                          <th scope="col">Username</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Role</th>
+                          <th style="text-align: center; " scope="col">Tools</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for user in current_users %}
+                            <tr>
+                                <th scope="row">{{ user.id }}</th>
+                                <td>{{ user.firstname }}</td>
+                                <td>{{ user.lastname }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.role }}</td>
+                                <td style="text-align: center;">
+                                    <a class="navbar-item btn btn-danger" href="{{ url_for('admin.delete_user', id=user.id) }}">Delete</a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="viewlogs" role="tabpanel" aria-labelledby="viewlogs-tab">
+
+            </div>
+
+            <div class="tab-pane fade" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">
+                <table class="table">
+                    <tr>
+                        <th>Username</th>
+                        <th>Question</th>
+                        <th>Option 1</th>
+                        <th>Option 2</th>
+                        <th>Option 3</th>
+                        <th>Option 4</th>
+                        <th>Answer</th>
+                    </tr>
+                    {% for question in questions %}
+                        <tr>
+                            <td>{{ question.username }}</td>
+                            <td>{{ question.question }}</td>
+                            <td>{{ question.option1 }}</td>
+                            <td>{{ question.option2 }}</td>
+                            <td>{{ question.option3 }}</td>
+                            <td>{{ question.option4 }}</td>
+                            <td>{{ question.answer }}</td>
+                            <td><a class="navbar-item" href="{{ url_for('admin.update_question', id=question.id) }}">Update</a></td>
+                            <td><a class="navbar-item" href="{{ url_for('admin.delete_question', id=question.id) }}">Delete</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="column is-6 is-offset-3">
+                    <h1 class="title is-1">Create Question</h1>
+                    <div class="box">
+                        <form method="POST" action="/create_question">
+                            <div>
+                                <button class="btn-primary is-info is-centered">Create Question</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="leaderboard" role="tabpanel" aria-labelledby="leaderboard-tab">
+
+                <h2 style="margin-top: 100px; text-align: center"><i class="fab fa-slack-hash"></i> Ranking</h2>
+                    <table style="margin-top: 50px; text-align: center" class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Rank</th>
+                          <th scope="col">Username</th>
+                          <th scope="col">CO2 Emissions (Tonnes)</th>
+                          <th scope="col">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for emission in emissions2 %}
+                            <tr>
+                                <th scope="row">{{ emission.rank }}</th>
+                                <td>{{ emission.username }}</td>
+                                <td>{{ emission.result }}</td>
+                                <td>{{ emission.created.strftime('%d-%m-%y  %H:%M') }}</td>
+                                <td><a class="navbar-item" href="{{ url_for('admin.delete_result', id=emission.id) }}">Delete</a></td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                </table>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a class="btn btn-danger" href="{{ url_for('admin.reset_leaderboard') }}">Reset Leaderboard</a>
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
+{% endblock %}
+

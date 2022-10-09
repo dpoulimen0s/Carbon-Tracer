@@ -1,0 +1,16 @@
+cryptography
+MarkupSafe
+Werkzeug
+click
+itsdangerous
+greenlet
+setuptools
+Flask
+WTForms
+SQLAlchemy
+pyotp
+flask-login
+pycryptodome
+flask-wtf
+flask-sqlalchemy
+email_validator

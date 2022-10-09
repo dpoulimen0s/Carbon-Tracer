@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="column is-10 is-offset-1">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification is-danger">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <h2 class="text-center"><strong>Quiz</strong></h2>
+    <br>
+    <br>
+    {% for question in questions %}
+        <div class="card mb-3 mx-auto" style="max-width: 900px;">
+        <h8 class="text-center">Question {{ question.question_number }} out of {{ number_of_questions }}</h8>
+            <div class="card-body">
+                <h5 class="question text-center">{{ question.question }}</h5>
+                <br>
+                <div class="form-check text-center">
+                    <input type="radio" class="btn-check btn-lg" name="{{ question.question_number }}option" id="{{ question.question_number }}option1" value="{{ question.option1 }}" autocomplete="off">
+                    <label class="btn btn-primary" for="{{ question.question_number }}option1"><h6>{{ question.option1 }}</h6></label>
+                    &nbsp;
+                    <input type="radio" class="btn-check btn-lg" name="{{ question.question_number }}option" id="{{ question.question_number }}option2" value="{{ question.option2 }}" autocomplete="off">
+                    <label class="btn btn-primary" for="{{ question.question_number }}option2"><h6>{{ question.option2 }}</h6></label>
+                    &nbsp;
+                    {% if question.option3 %}
+                        <input type="radio" class="btn-check btn-lg" name="{{ question.question_number }}option" id="{{ question.question_number }}option3" value="{{ question.option3 }}" autocomplete="off">
+                        <label class="btn btn-primary" for="{{ question.question_number }}option3"><h6>{{ question.option3 }}</h6></label>
+                    {% endif %}
+                    &nbsp;
+                    {% if question.option4 %}
+                        <input type="radio" class="btn-check btn-lg" name="{{ question.question_number }}option" id="{{ question.question_number }}option4" value="{{ question.option4 }}" autocomplete="off">
+                        <label class="btn btn-primary" for="{{ question.question_number }}option4"><h6>{{ question.option4 }}</h6></label>
+                    {% endif %}
+                    <br>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+    {% endfor %}
+
+    <!-- Trigger/Open The Modal -->
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" id="SubmitBtn">View Results</button>
+    </div>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h3 class="modal-title">Your Results</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="accordion" id="accordion">
+                    {% for question in questions %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ question.question_number }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ question.question_number }}" aria-expanded="true" aria-controls="collapseOne">
+                                    Question {{ question.question_number}}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ question.question_number }}" class="accordion-collapse collapse" aria-labelledby="heading{{ question.question_number }}" data-bs-parent="#accordion">
+                                <div class="accordion-body">
+                                    <h5 class="text-center"><strong>Question: </strong><small>{{ question.question }}</small></h5>
+                                    <br>
+                                    <h5 class="text-center"><strong>Your Answer: </strong><small class="ans"></small></h5>
+                                     <h5 class="text-center"><strong>Correct Answer: </strong><small class="questionans">{{ question.answer }}</small></h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <br>
+                    <br>
+                    <h4 class="text-center">You scored <strong id="totalscore"></strong> out of <strong>{{ total }}</strong></h4>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <div>
+                        <a class="gap-2 btn btn-primary" href="{{url_for('index')}}">Home</a>
+                        <a class="gap-2 btn btn-primary" href="{{url_for('quiz.quiz')}}">Retake Quiz</a>
+                        <a class="gap-2 btn btn-primary" href="{{url_for('calculator.calculator')}}">Take Carbon Footprint Calculator</a>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" tabindex="2">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $( "#SubmitBtn" ).click(function () {
+            let score = 0
+            $('.ans').each(function(i) {
+                let k = (i+1).toString();
+                let currentAns = k.concat("option");
+                if ($('input[name="'+currentAns+'"]:checked').val() == $( ".questionans").eq(i).text()){
+                    score += 1
+                }
+                $(this).html($('input[name="'+currentAns+'"]:checked').val());
+            });
+            document.getElementById('totalscore').innerHTML = score;
+        });
+    </script>
+
+
+    <h3 id="disp" style= "color:green"> </h3>
+    <h4 id="error" style= "color:red"> </h4>
+
+
+{% endblock %}

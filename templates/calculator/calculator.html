@@ -1,0 +1,349 @@
+<!-- Author: Dimitrios Poulimenos -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Calculator</h1>
+
+    <div style="margin-top: 40px" class="container">
+
+        {% if current_user.is_authenticated %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <p style="text-align: center; font-size: 20px">Remember to add the annual carbon emission</p>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <span> {{ message }} </span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <div class="row">
+
+                <!-- Energy Section -->
+                <div class="col-sm-4 mb-3 border-end">
+                    <h2 class="h2calc"><i class="fas fa-charging-station"></i> Energy</h2>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="electricity" class="col-form-label inputcalc">Electricity: </label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.electricity(type="text", min="0", class="form-control", id="electricity", placeholder="kwh")}}
+                          {% for error in form.electricity.errors %}
+                              <div class="alert alert-danger" role="alert">
+                                  {{ error }}
+                              </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="gas" class="col-form-label inputcalc">Natural Gas: </label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.gas(type="text", min="0", class="form-control", id="gas", placeholder="kwh")}}
+                          {% for error in form.gas.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="propane" class="col-form-label inputcalc">Propane: </label>
+                      </div>
+                      <div class="col-auto">
+                        {{ form.propane(type="text", min="0", class="form-control", id="propane", placeholder="Litres")}}
+                            {% for error in form.propane.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="wood" class="col-form-label inputcalc">Wood: </label>
+                      </div>
+                      <div class="col-auto">
+                        {{ form.wood(type="text", min="0", class="form-control", id="wood", placeholder="Tonnes")}}
+                            {% for error in form.wood.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                </div>
+
+                <!-- House Section -->
+                <div class="col-sm-4 mb-3 border-end">
+                    <h2><i class="fas fa-home"></i> House</h2>
+                    <div class="row align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-4">
+                        <label for="food" class="col-form-label inputcalc">Food & Drinks: </label>
+                      </div>
+                      <div style="margin-left: 22px" class="col-3">
+                            {{ form.food(type="text",min="0", class="form-control", id="food", placeholder="£")}}
+                            {% for error in form.food.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                      <div class="col-3">
+                            {{ form.food_type(type="text",style="margin-left: -10px", class="form-control", id="foodtype", placeholder="Type")}}
+                            {% for error in form.food_type.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="clothes" class="col-form-label inputcalc">Clothes & Shoes: </label>
+                      </div>
+                      <div class="col-auto">
+                        {{ form.clothes(type="text",min="0", class="form-control", id="clothes", placeholder="£")}}
+                            {% for error in form.clothes.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="telephone" class="col-form-label inputcalc">Teephone & Mobile: </label>
+                      </div>
+                      <div class="col-auto">
+                        {{ form.telephone(type="text",min="0", class="form-control", id="telephone", placeholder="£")}}
+                            {% for error in form.telephone.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="hospitality" class="col-form-label inputcalc">Clubs - Restaurants:</label>
+                      </div>
+                      <div class="col-auto">
+                        {{ form.hospitality(type="text", min="0", class="form-control", id="hospitality", placeholder="£")}}
+                            {% for error in form.hospitality.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                </div>
+
+                <!-- Travel Section -->
+                <div class="col-sm-4 mb-3 border-end">
+                    <h2><i class="fas fa-bus-alt"></i> Bus & Rail</h2>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="bus" class="col-form-label inputcalc">Bus: </label>
+                      </div>
+                      <div class="col-auto">
+                            {{ form.bus(type="text", min="0", class="form-control", id="floatingInput", placeholder="Miles")}}
+                            {% for error in form.bus.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="coach" class="col-form-label inputcalc">Coach: </label>
+                      </div>
+                      <div class="col-auto">
+                            {{ form.coach(type="text", min="0", class="form-control", id="coach", placeholder="Miles")}}
+                            {% for error in form.coach.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="nationRail" class="col-form-label inputcalc">National Rail: </label>
+                      </div>
+                      <div class="col-auto">
+                            {{ form.natRail(type="text", min="0", class="form-control", id="nationRail", placeholder="Miles")}}
+                            {% for error in form.natRail.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="taxiUber" class="col-form-label inputcalc">Taxi & Uber:</label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.taxiUber(type="text", min="0", class="form-control", id="taxiUber", placeholder="Miles")}}
+                                {% for error in form.taxiUber.errors %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ error }}
+                                    </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <!-- Car Section -->
+                <div class="col-sm-4 mb-3 border-end">
+                    <h2><i class="fas fa-car-alt"></i> Car</h2>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="car" class="col-form-label inputcalc">Mileage: </label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.car_mileage(type="text", min="0", class="form-control", id="floatingInput", placeholder="Miles")}}
+                          {% for error in form.car_mileage.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="cartype" class="col-form-label inputcalc">Type: </label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.car_type(type="text", min="0", class="form-control", id="cartype", placeholder="Type")}}
+                          {% for error in form.car_type.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="fuelType" class="col-form-label inputcalc">Fuel Type: </label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.fuel_type(type="text", min="0", class="form-control", id="fuelType", placeholder="Fuel")}}
+                          {% for error in form.fuel_type.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                </div>
+
+                <!-- Motorbike Section  -->
+                <div class="col-sm-4 mb-3 border-end">
+                    <h2><i class="fas fa-motorcycle"></i> Motorbike</h2>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="motormile" class="col-form-label inputcalc">Mileage: </label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.motorbike_mileage(type="text", class="form-control", id="floatingInput", placeholder="Miles")}}
+                          {% for error in form.motorbike_mileage.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                      {{ form.csrf_token() }}
+                      <div class="col-auto">
+                        <label for="motoType" class="col-form-label inputcalc">Type: </label>
+                      </div>
+                      <div class="col-auto">
+                          {{ form.motorbike_type(type="text", class="form-control", id="floatingInput", placeholder="Type")}}
+                          {% for error in form.motorbike_type.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 mb-3 border-end">
+                    <h3><i class="fas fa-exclamation-circle"></i> Clarifications</h3>
+                    <p class="text-muted">*£ represents the amount of money you have spend on that specific good.</p>
+                    <p class="text-muted">*Miles represents how many miles per year you did.</p>
+                    <p class="text-muted">*Kwh, *Litres, *Tonnes represents your anual consumption on those. </p>
+                </div>
+            </div>
+            <!-- Calculate button-->
+            {% if current_user.is_authenticated %}
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    {{ form.submit(class="mb-3 btn btn-primary",style="margin-top: 30px", type="submit", value="Calculate") }}
+                </div>
+            {% endif %}
+        </form>
+        {% if not current_user.is_authenticated %}
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <!-- Trigger/Open the modal to notify the user  -->
+                <button style="margin-top: 115px" data-bs-toggle="modal" data-bs-target="#profmodal"
+                        onclick="document.getElementById('profmodal').style.display='block'" class="btn btn-primary">
+                            Calculate
+                </button>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="profmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="profmodal1">Notice</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="text-align: left">We are sorry for the inconvenience, but you have to be a user in order to
+                                    use our calculator.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{{url_for('users.register')}}" class="btn btn-primary">Sign Up</a>
+                            <a href="{{url_for('users.login')}}" class="btn btn-success">Log In</a>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if current_user.is_authenticated %}
+        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="myinbox-tab" data-bs-toggle="tab" data-bs-target="#myinbox" type="button" role="tab" aria-controls="myinbox" aria-selected="true">Inbox ({{ unread_total }})</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="myinboxsettings-tab" data-bs-toggle="tab" data-bs-target="#myinboxsettings" type="button" role="tab" aria-controls="myinboxsettings" aria-selected="false">Inbox Settings</button>
+            </li>
+            {% if current_user.role =='admin' %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="sendmessage-tab" data-bs-toggle="tab" data-bs-target="#sendmessage" type="button" role="tab" aria-controls="sendmessage" aria-selected="false">Send Message</button>
+                </li>
+            {% endif %}
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+
+            <div class="tab-pane fade show active" id="myinbox" role="tabpanel" aria-labelledby="myinbox-tab">
+                <br>
+                <h2 class="text-center"><strong>{{ current_user.firstname }}'s Inbox</strong></h2>
+                <br>
+                <div class="accordion" id="accordion">
+                    <h3>Unread Messages ({{ unread_total }})</h3>
+                    {% if not unread_total == 0 %}
+                        <a href="{{ url_for('users.read_all') }}">Mark all As Read</a>
+                        <br>
+                        <br>
+                    {% endif %}
+                    {% for message in unread %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ message.id }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ message.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                    <strong>Carbon Tracer Team <br>{{ message.header }}
+                                        &emsp; {{ message.date.strftime('%d-%m-%y  %H:%M') }}</strong>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ message.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ message.id }}" data-bs-parent="#accordion">
+                                <div class="accordion-body">
+                                    <h4><strong>{{ message.header }}</strong></h4>
+                                    <br>
+                                    <h6>{{ message.body }}</h6>
+                                    {% if message.header == quizUpdate %}
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('quiz.quiz')}}">Go to Quiz</a>
+                                        <br>
+                                    {% endif %}
+                                    {% if message.header == 'Welcome to Carbon Tracer!' %}
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('quiz.quiz')}}">Go to Quiz</a>
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('calculator.calculator')}}">Go to Carbon Footprint Calculator</a>
+                                        <br>
+                                    {% endif %}
+                                    <br>
+                                    <h6>Kind regards</h6>
+                                    <h6>Carbon Tracer Team</h6>
+                                    <h6><small>{{ message.date }}</small></h6>
+                                    <br>
+                                    <a href="{{ url_for('users.read', id=message.id) }}">Mark As Read</a>
+                                    &emsp;<a href="{{ url_for('users.delete', id=message.id) }}">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+                </div>
+
+                <br>
+                <br>
+
+                <div class="accordion" id="accordion">
+                    <h3>Read Messages ({{ read_total }})</h3>
+                    {% for message in read %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ message.id }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ message.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                    <strong>Carbon Tracer Team <br>{{ message.header }} &emsp; {{ message.date.strftime('%d-%m-%y  %H:%M') }}</strong>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ message.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ message.id }}" data-bs-parent="#accordion">
+                                <div class="accordion-body">
+                                    <h4><strong>{{ message.header }}</strong></h4>
+                                    <br>
+                                    <h6>{{ message.body }}</h6>
+                                    {% if message.header == quizUpdate %}
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('quiz.quiz')}}">Go to Quiz</a>
+                                    <br>
+                                    {% endif %}
+                                    {% if message.header == 'Welcome to Carbon Tracer!' %}
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('quiz.quiz')}}">Go to Quiz</a>
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('calculator.calculator')}}">Go to Carbon Footprint Calculator</a>
+                                        <br>
+                                    {% endif %}
+                                    <br>
+                                    <h6>Kind regards</h6>
+                                    <h6>Carbon Tracer Team</h6>
+                                    <h6><small>{{ message.date }}</small></h6>
+                                    <br>
+                                    <a href="{{ url_for('users.unread', id=message.id) }}">Mark As Unread</a>
+                                    &emsp;
+                                    <a href="{{ url_for('users.delete', id=message.id) }}">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+                </div>
+
+                <div class="accordion" id="accordion">
+                    <h3>Older Messages ({{ older_total }})</h3>
+                    {% if not older_total == 0 %}
+                        <a href="{{ url_for('users.deleteAllOlder') }}">Delete all older messages</a>
+                        <br>
+                        <br>
+                    {% endif %}
+                    {% for message in older %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ message.id }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ message.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                    <strong>Carbon Tracer Team <br>{{ message.header }} &emsp; {{ message.date.strftime('%d-%m-%y  %H:%M') }}</strong>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ message.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ message.id }}" data-bs-parent="#accordion">
+                                <div class="accordion-body">
+                                    <h4><strong>{{ message.header }}</strong></h4>
+                                    <br>
+                                    <h6>{{ message.body }}</h6>
+                                    {% if message.header == quizUpdate %}
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('quiz.quiz')}}">Go to Quiz</a>
+                                    <br>
+                                    {% endif %}
+                                    {% if message.header == 'Welcome to Carbon Tracer!' %}
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('quiz.quiz')}}">Go to Quiz</a>
+                                        <a class="gap-2 btn btn-primary" href="{{url_for('calculator.calculator')}}">Go to Carbon Footprint Calculator</a>
+                                        <br>
+                                    {% endif %}
+                                    <br>
+                                    <h6>Kind regards</h6>
+                                    <h6>Carbon Tracer Team</h6>
+                                    <h6><small>{{ message.date }}</small></h6>
+                                    <br>
+                                    &emsp;<a href="{{ url_for('users.delete', id=message.id) }}">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="myinboxsettings" role="tabpanel" aria-labelledby="myinboxsettings-tab">
+                <br>
+                <h2 class="text-center"><strong>{{ current_user.firstname }}'s Inbox Settings</strong></h2>
+                <br>
+                <h3>Current Update Preferences: </h3>
+                <h5>Receive updates when new quiz questions are posted: &emsp;
+                {% if current_user.update %}
+                    On</h5>
+                    <a href="{{ url_for('users.update_preferences') }}">Change to Off</a>
+                {% endif %}
+                {% if not current_user.update %}
+                    Off</h5>
+                    <a href="{{ url_for('users.update_preferences') }}">Change to On</a>
+                {% endif %}
+            </div>
+
+
+            {% if current_user.role == 'admin' %}
+            <div  class="tab-pane fade" id="sendmessage" role="tabpanel" aria-labelledby="sendmessage-tab">
+                <br>
+                <h2 class="text-center"><strong>Send a message</strong></h2>
+                <br>
+                <div class="col-xl col-lg col-md col-sm col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <div class="notification is-danger">
+                                    {{ messages[0] }}. Go to <a href="{{ url_for('users.login') }}">login page</a>.
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="POST">
+                            <div class="field">
+                                {{ form.csrf_token() }}
+                                <div class="control">
+                                    <label for="sender">From: </label>
+                                    <fieldset disabled>
+                                        {{ form.sender(class="input form-control", id="sender", value="admin") }}
+                                        {% for error in form.sender.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="receiver">To: </label>
+                                    {{ form.receiver(class="input form-control", id="receiver") }}
+                                    {% for error in form.receiver.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="header">Subject: </label>
+                                    {{ form.header(class="input form-control", id="header") }}
+                                    {% for error in form.header.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="body">Message: </label>
+                                    {{ form.body(class="textarea form-control", id="body", style="height: 100px") }}
+                                    {% for error in form.body.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <br>
+                            <div align="right">
+                                {{ form.send(class="button is-info is-centered") }}
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

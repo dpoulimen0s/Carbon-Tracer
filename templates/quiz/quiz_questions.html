@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Admin Page</h1>
+
+    <body>
+        <h4 class="title is-4">Quiz Questions</h4>
+        <div class="row justify-content-center">
+            <table>
+                <tr>
+                    <th>Username</th>
+                    <th>Question</th>
+                    <th>Option 1</th>
+                    <th>Option 2</th>
+                    <th>Option 3</th>
+                    <th>Option 4</th>
+                    <th>Answer</th>
+                </tr>
+                {% for question in questions %}
+                    <tr>
+                        <td>{{ question.username }}</td>
+                        <td>{{ question.question }}</td>
+                        <td>{{ question.option1 }}</td>
+                        <td>{{ question.option2 }}</td>
+                        <td>{{ question.option3 }}</td>
+                        <td>{{ question.option4 }}</td>
+                        <td>{{ question.answer }}</td>
+                        <td><a class="navbar-item" href="{{ url_for('admin.update_question', id=question.id) }}">Update</a></td>
+                        <td><a class="navbar-item" href="{{ url_for('admin.delete_question', id=question.id) }}">Delete</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </body>
+
+    <div class="column is-6 is-offset-3">
+        <h4 class="title is-1">Create Question</h4>
+        <div class="box">
+            <form method="POST" action="/create_question">
+                <div>
+                    <button class="button is-info is-centered">Create Question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

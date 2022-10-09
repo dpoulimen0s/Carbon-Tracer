@@ -1,0 +1,93 @@
+<!-- Author: Dimitrios Poulimenos -->
+{% extends "base.html" %}
+
+{% block content %}
+    {% if current_user.is_authenticated and current_user.role=='user' %}
+        <ul style="justify-content: center" class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="mygraphs-tab" data-bs-toggle="tab" data-bs-target="#mygraphs" type="button" role="tab" aria-controls="mygraphs" aria-selected="true">My Graphs</button>
+                </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="leaderboard-tab" data-bs-toggle="tab" data-bs-target="#leaderboard" type="button" role="tab" aria-controls="leaderboard" aria-selected="false">Leaderboard</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">My History</button>
+            </li>
+
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="mygraphs" role="tabpanel" aria-labelledby="mygraphs-tab">
+
+                <div style="margin-top: 50px;" class="row ">
+                    <div class="col-md-12 ">
+                        <h2>World's Emission</h2>
+                        <p>Here you can see carbon emission per country.</p>
+                        <div id="regions_div" style="width: 100%; height: 400px; "></div>
+                    </div>
+
+                </div>
+                <hr>
+                <div class="row">
+                    <div  class="col-md-12">
+                        <h2>Line Graph</h2>
+                        <p>This line graph demonstrates the progression of your emission in comparison with other major
+                            emissions around the globe..</p>
+                        <div id="chart_div" style=" height: 300px;"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="leaderboard" role="tabpanel" aria-labelledby="leaderboard-tab">
+                <h2 style="margin-top: 100px; text-align: center"><i class="fab fa-slack-hash"></i> Ranking</h2>
+                    <table style="margin-top: 50px; text-align: center" class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Rank</th>
+                          <th scope="col">Username</th>
+                          <th scope="col">CO2 Emissions (Tonnes)</th>
+                          <th scope="col">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for emission in emissions2 %}
+                            <tr>
+                                <th scope="row">{{ emission.rank }}</th>
+                                <td>{{ emission.username }}</td>
+                                <td>{{ emission.result }}</td>
+                                <td>{{ emission.created.strftime('%d-%m-%y  %H:%M') }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                <!-- Results Section -->
+                <h2 style="margin-top: 100px; text-align: center"><i class="fas fa-poll"></i> Results</h2>
+                <table style="margin-top: 50px; text-align: center" class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Username</th>
+                          <th scope="col">CO2 Emissions (Tonnes)</th>
+                          <th scope="col">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for emission in emissions %}
+                            <tr>
+                                <th scope="row">{{ emission.id }}</th>
+                                <td>{{ emission.username }}</td>
+                                <td id="emission">{{ emission.result }}</td>
+                                <td>{{ emission.created }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    {% endif %}
+{% endblock %}

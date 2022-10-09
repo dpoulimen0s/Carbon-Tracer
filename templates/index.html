@@ -1,0 +1,84 @@
+<!-- Author: Dimitrios Poulimenos -->
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="margin-bottom: 10px; top: 0;" class="d-flex flex-row-reverse py-0">
+        <img class="langhov" src="../static/img/china.png" width="32" height="32" >
+        <img class="langhov" style="margin-right: 5px" src="../static/img/german.png" width="32" height="32" >
+        <img class="langhov" style="margin-right: 5px" class="flex-right" src="../static/img/united-kingdom.png" width="32" height="32" >
+    </div>
+
+    <div class="container py-3 jump1">
+       <div class="jumbotron py-3 ">
+            <div class="container py-3 text-center">
+                <h1 class="display-1">Welcome to Carbon Tracer</h1>
+                <br>
+                <br>
+                <h2>"Be the change you wish</h2>
+                <h2>to see in the world"</h2>
+                <h7>-Unknown</h7>
+            </div>
+       </div>
+    </div>
+    <hr>
+    <div  class="container marketing">
+        <!-- Three columns of text below the carousel -->
+        <div class="row">
+            <div style="bottom: 0" class="col-lg-4">
+                <i class="fas fa-crosshairs fa-10x"></i>
+                <h2>Our Vision</h2>
+                <p>Our aim is to create a sense of environmental responsibility for the daily actions of individuals.<p><p> To learn more about our aims click the following link.</p>
+                <p><a class="btn btn-primary" data-bs-toggle="collapse" href="#vision" role="button" aria-expanded="false" aria-controls="vision">Learn more &raquo;</a></p>
+            </div><!-- /.col-lg-4 -->
+            <div style="bottom: 0" class="col-lg-4">
+                <i class="fab fa-connectdevelop fa-10x"></i>
+                <h2>Our Contribution Matters</h2>
+                <p>By calculating our carbon footprint we can realise the aspects of our lives that damage our environment the most and act to prevent any further damage. <p><p> To find more on the importance of calculating your carbon footprint click the following link.</p>
+                <p><a class="btn btn-primary" data-bs-toggle="collapse" href="#importance" role="button" aria-expanded="false" aria-controls="importance">Learn more &raquo;</a></p>
+            </div><!-- /.col-lg-4 -->
+            <div style="bottom: 0" class="col-lg-4">
+                <i class="fas fa-chart-bar fa-10x"></i>
+                <h2>Providing Clarity</h2>
+                <p>In a world filled with misinformation we want to provide you with the reality of the situation.<p><p> To reveal the truth about our environment click the following link.</p>
+                <p><a class="btn btn-primary" data-bs-toggle="collapse" href="#stats" role="button" aria-expanded="false" aria-controls="stats">Learn more &raquo;</a></p>
+            </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+    </div>
+    <!-- Collapse cards for each of the 3 items on the carousel-->
+    <div class="row">
+        <div style="bottom: 0" class="col-lg-4">
+            <div class="collapse multi-collapse text-center" id="vision">
+                <h2>What we hope to achieve</h2>
+                <p>Our aim is to create a sense of environmental responsibility for the daily actions of individuals.
+                <p></p>
+                <img style="margin-right: 5px" src="../static/img/thinking%20(2).jpg" width="400" height="400" >
+                <p><p> As the quote above suggests, we want users to look at themselves and how they live their lives and focus on what they can do as just one person to make a difference.
+                <p></p>
+                <h4><strong>What do we provide?</strong></h4>
+                <p><p>We aim to provide the means to both self-reflect on how we can improve ourselves as well as providing relevant information on what the average person can do to implement this change. After all you cannot expect people to change their behaviour for the better if they don’t know how their current actions are contributing to the issue nor if they don’t know what substitutes they can make to help the issue.
+            </div>
+        </div>
+        <div style="bottom: 0" class="col-lg-4">
+            <div class="collapse multi-collapse text-center" id="importance">
+                <h2>Importance of calculating our contribution</h2>
+                <p></p>
+                <img style="margin-right: 5px" src="../static/img/calculating.png" width="400" height="200" >
+                <p></p>
+                <h4><strong>Your Actions Matter</strong></h4>
+                <p>In a world of 7 billion people and numerous high-polluting multinational companies, it can be difficult to find purpose in being kinder to the environment. It is easy to think that as just one small person in a large world that your actions as an individual dont make a difference, but you have to make the change you want to see in the world. Together if we all make the change to treat our environment with the care and respect it deserves then there is nothing that we can't achieve! </p>
+                <h4><strong>Why calculate your carbon footprint?</strong></h4>
+                <p><p>By taking the carbon footprint calculator you can identify the areas in your life style that impact our environment the most. Having the knowledge of what is adding to the problem is the first step. The next is to act on that knowledge.
+            </div>
+        </div>
+        <div style="bottom: 0" class="col-lg-4">
+            <div class="collapse multi-collapse text-center" id="stats">
+                <h2>Stats</h2>
+                <img style="margin-right: 5px" src="../static/img/graph.jfif" width="400" height="200" >
+                <p></p>We aim to provide you with the latest facts and stats that can help ordinary people to make their change for the better.
+                <p></p>
+                <h4><strong>What makes our statistics different?</strong></h4>
+                <p><p>We provide statistics that matter to you. By having relevant and correct information you can correctly judge and tweak aspects of your lifestyle with full knowledge that the changes have a given effect.
+            </div>
+        </div>
+    </div>
+{% endblock %}
